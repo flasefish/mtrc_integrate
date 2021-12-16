@@ -1,6 +1,17 @@
 buildscript {
     ext.kotlin_version = '1.3.50'
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/grails-core' }
+
+        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
         google()
         mavenCentral()
     }
@@ -13,8 +24,28 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/grails-core' }
+        maven { url "http://maven.bi.sensetime.com:8081/repository/bi_library_snapshots/" }
+        maven { url "http://maven.bi.sensetime.com:8081/repository/st_bi_snapshot/" }
+        maven { url "http://maven.bi.sensetime.com:8081/repository/bi_library_releases/" }
+        maven { url "http://maven.bi.sensetime.com:8081/repository/st_bi_release/" }
+        maven { url "http://maven.bi.sensetime.com:8081/repository/maven-mixed/" }
+        maven { url "https://repo.eclipse.org/content/repositories/paho-snapshots/" }
+
+        maven { url "http://172.20.52.130:8081/repository/mercury-snapshot/" }
+        maven { url "http://172.20.52.130:8081/repository/mercury-release/" }
+
+        maven { url "http://maven.opencloud.sensetime.com/repository/maven-release/" }
+        maven { url "http://maven.opencloud.sensetime.com/repository/maven-snapshots/" }
+
+        maven { url 'https://jitpack.io' }
         google()
         mavenCentral()
+        maven { url 'https://repo1.maven.org/maven2/' }
     }
 }
 
