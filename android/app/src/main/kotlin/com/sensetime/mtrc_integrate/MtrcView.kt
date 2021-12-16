@@ -1,6 +1,8 @@
 package com.sensetime.mtrc_integrate
 
 import android.content.Context
+import android.os.Handler
+import android.os.Message
 import io.flutter.plugin.platform.PlatformView
 import thunder.mrtc.MrtcRender
 import android.view.View
@@ -24,6 +26,8 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
     lateinit var methodChannel : MethodChannel
     lateinit var eventChannel  : EventChannel
     var impl: MtrcControl = MtrcControl()
+    lateinit var handler: Handler
+
 
     companion object {
         var NATIVE_MRTC_VIEW_TYPE_ID: String = "com.sensetime.mtrc_integrate/MtrcView"
@@ -41,7 +45,9 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         eventChannel = EventChannel(messenger,NATIVE_MRTC_VIEW_EVENT_ID.toString() + "_" + viewId);
         eventChannel.setStreamHandler(this)
 
-        impl.initMrtc(mContext)
+        handler = LoginHandler()
+        impl.initMrtc(mContext,handler);
+
 
     }
 
@@ -89,5 +95,30 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
 
     override fun onCancel(arguments: Any?) {
         eventSink = null
+    }
+
+    open fun switchToLoginState(type:Int){
+        eventSink?.success(type)
+    }
+
+    inner class LoginHandler : Handler() {
+       override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                MessageType.LOGIN -> {
+                    Log.d("zhoud","LoginHandler MessageType.LOGIN")
+                    this@MtrcView.switchToLoginState(MessageType.LOGIN) //获取外部类的成员变量
+                }
+                MessageType.LOGOUT -> {
+                    Log.d("zhoud","LoginHandler MessageType.LOGOUT")
+                }
+                MessageType.CALL_IN -> {
+                    Log.d("zhoud","LoginHandler MessageType.LOGOUY")
+                }
+                else -> {
+                    Log.d("zhoud","LoginHandler MessageType.LOGOUY")
+                }
+            }
+        }
     }
 }

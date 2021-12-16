@@ -19,12 +19,12 @@ class MtrcControl{
     private lateinit var onLineEventExecutor: OnLineEvent
     private lateinit var handler: Handler
 
-    public fun initMrtc(context: Context) {
+    public fun initMrtc(context: Context,mtrcLoginHandle : Handler) {
         val mrtcSetupParam = MrtcSetupParam("ws://14.215.130.139:18081/ws", "stun:14.215.130.139:3478", true, context)
         mrtcOperator = MrtcOperator.getInstance()
         mrtcOperator.setup(mrtcSetupParam)
 
-        handler = LoginHandler()
+        handler = mtrcLoginHandle
         Log.d("zhoud","initMrtc")
     }
 
