@@ -23,6 +23,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
     private var eventSink: EventChannel.EventSink? = null
     lateinit var methodChannel : MethodChannel
     lateinit var eventChannel  : EventChannel
+    var impl: MtrcControl = MtrcControl()
 
     companion object {
         var NATIVE_MRTC_VIEW_TYPE_ID: String = "com.sensetime.mtrc_integrate/MtrcView"
@@ -54,6 +55,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         Log.d("zhoud","onMethodCall = ${methodCall.method}  arg =${methodCall.arguments.toString()} ")
         if(methodCall.method == "MtrcLogin"){
             result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
+            impl.initMrtc(mContext);
         }else if(methodCall.method == "MtrcCall"){
             Log.d("zhoud","Login")
 

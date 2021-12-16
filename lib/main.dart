@@ -52,10 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
   late MethodChannel _channel;
   late EventChannel _eventChannel;
   int count = 0;
+  String _fromNativeInfo = "";
 
   void onMtrcViewCreated(int id) {
     _channel =  MethodChannel('com.sensetime.mtrc_integrate/MtrcView_$id');
-    _eventChannel =   EventChannel('com.sensetime.mtrc_integrate/MtrcEvent_$id');
+    _eventChannel =  EventChannel('com.sensetime.mtrc_integrate/MtrcEvent_$id');
+    _eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onErroe);
   }
 
   @override
@@ -106,17 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          StreamBuilder(
-              initialData: "暂无消息",
-              stream: _eventChannel.receiveBroadcastStream(),
-              builder: (context, snapshot) {
-                return Center(
-                  child: Text(
-                    "eventChannel:${snapshot.data.toString()}",
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
-              }),
+          Text(_fromNativeInfo),
+
           Container(
             width: MediaQuery.of(context).size.width,
             height: 600,
@@ -132,6 +125,17 @@ class _MyHomePageState extends State<MyHomePage> {
               onPlatformViewCreated: onMtrcViewCreated, //初始化
             ),
           ),
+       /*   StreamBuilder(
+              initialData: "暂无消息",
+              stream: _eventChannel.receiveBroadcastStream(),
+              builder: (context, snapshot) {
+                return Center(
+                  child: Text(
+                    "eventChannel监听的数据:${snapshot.data.toString()}",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              }),*/
         ],
 
       ),
@@ -195,5 +199,19 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e.toString());
     }
     return  result;
+  }
+
+  /**
+   * 监听原生传递回来的值（通过eventChannel）
+   */
+  void _onEvent(dynamic object) {
+    print(object.toString() + "-------------从原生主动传递过来的值");
+    setState(() {
+      _fromNativeInfo = object.toString();
+    });
+  }
+
+  void _onErroe(Object object) {
+    print(object.toString() + "-------------从原生主动传递过来的值");
   }
 }
