@@ -40,12 +40,19 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
 
 
     override fun onMethodCall(@NonNull methodCall: MethodCall, @NonNull result: MethodChannel.Result) {
-        Log.d("zhoud","onMethodCall")
-       // Log.d("CCTextView MethodChannel call.method:" + methodCall.method.toString() + "  call arguments:" + methodCall.arguments)
-        //if ("setText".equals(methodCall.method)) {
-           // val text = methodCall.arguments as String
-            //myNativeView.setText(text)
-            result.success("修改成功")
-        //}
+        Log.d("zhoud","onMethodCall = ${methodCall.method}  arg =${methodCall.arguments.toString()} ")
+        if(methodCall.method == "MtrcLogin"){
+            result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
+        }else if(methodCall.method == "MtrcCall"){
+            Log.d("zhoud","Login")
+
+            result.success("android androidMethodLoginExec run：：" + methodCall.arguments.toString() + methodCall.method)
+        }else if(methodCall.method == "MtrcLogout") {
+            Log.d("zhoud","MtrcLogout")
+        }else if(methodCall.method == "MtrcHangup") {
+            Log.d("zhoud","MtrcHangup")
+        }else{
+            result.notImplemented()
+        }
     }
 }

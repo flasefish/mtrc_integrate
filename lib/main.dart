@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const platform = const MethodChannel("com.sensetime.mtrc_integrate/MtrcView");
     String result = "";
     try {
-      result = await platform.invokeMethod('androidMethodExec',{'canshu1':'ssssss1','canshu2':'ssssss2'});
+      result = await platform.invokeMethod('mtrclogin',{'1080'});
     } on Exception catch (e) {
       print(e.toString());
     }
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String result = "";
     try {
       result = await _channel.invokeMethod(
-          'androidMethodLoginExec', {'canshu1': 's1', 'canshu2': 's2'});
+          'MtrcLogin',  '1080');
     }on Exception catch(e){
       print(e.toString());
     }
