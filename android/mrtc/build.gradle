@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply from: 'maven_push.gradle'
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 22
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    api 'org.java-websocket:Java-WebSocket:1.5.1'
+//    api 'org.webrtc:google-webrtc:1.0.0-SNAPSHOT'
+    api 'org.webrtc:google-webrtc:1.0.1-SNAPSHOT'
+    api 'com.sensetime.bi:log:1.0.1'
+}
+
