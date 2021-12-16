@@ -40,6 +40,9 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
 
         eventChannel = EventChannel(messenger,NATIVE_MRTC_VIEW_EVENT_ID.toString() + "_" + viewId);
         eventChannel.setStreamHandler(this)
+
+        impl.initMrtc(mContext)
+
     }
 
     override fun getView(): View {
@@ -55,7 +58,8 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         Log.d("zhoud","onMethodCall = ${methodCall.method}  arg =${methodCall.arguments.toString()} ")
         if(methodCall.method == "MtrcLogin"){
             result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
-            impl.initMrtc(mContext);
+            impl.login(methodCall.arguments.toString())
+
         }else if(methodCall.method == "MtrcCall"){
             Log.d("zhoud","Login")
 

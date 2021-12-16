@@ -23,13 +23,19 @@ class MtrcControl{
         val mrtcSetupParam = MrtcSetupParam("ws://14.215.130.139:18081/ws", "stun:14.215.130.139:3478", true, context)
         mrtcOperator = MrtcOperator.getInstance()
         mrtcOperator.setup(mrtcSetupParam)
+
+        handler = LoginHandler()
         Log.d("zhoud","initMrtc")
     }
 
     public fun login(loginId:String){
+        Log.d("zhoud","MtrcControl login call")
         try {
+            Log.d("zhoud","MtrcControl login call1")
             onLineEventExecutor =  OnLineEvent()
+            Log.d("zhoud","MtrcControl login call2")
             onLineEventExecutor.handler = handler
+            Log.d("zhoud","MtrcControl login call3")
 
             var strOnlineExtraData: String? = null
             val extraDataMap: MutableMap<Any?, Any?> = HashMap<Any?, Any?>()
@@ -42,7 +48,7 @@ class MtrcControl{
                 strOnlineExtraData = jsonObject.toString()
             }
             mrtcOperator.online(loginId, "token-device-1:776e83532848482db216474f47160588", strOnlineExtraData, 0, 2, 3, onLineEventExecutor)
-            Log.d("zhoud","login")
+            Log.d("zhoud","MtrcControl login")
         } catch (e: Exception) {
             Log.d("zhoud", e.message.toString())
         }

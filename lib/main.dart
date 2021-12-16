@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const platform = const MethodChannel("com.sensetime.mtrc_integrate/MtrcView");
     String result = "";
     try {
-      result = await platform.invokeMethod('mtrclogin',{'1080'});
+      result = await platform.invokeMethod('mtrclogin','1080');
     } on Exception catch (e) {
       print(e.toString());
     }
