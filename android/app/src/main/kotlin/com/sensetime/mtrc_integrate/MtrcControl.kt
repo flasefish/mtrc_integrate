@@ -85,6 +85,24 @@ class MtrcControl{
         }
     }
 
+    public fun hangup(){
+        try {
+            this.call.hangup(object : HangupEventExecutor() {
+                @Override
+                fun onSuccess() {
+                    Log.i("zhoud", "hang up success")
+                }
+
+                @Override
+                fun onFail(code: Int, message: String?) {
+                    Log.i("zhoud", "hang up success")
+                }
+            }, ByeReason.INITIATIVE)
+            finish()
+        } catch (e: Exception) {
+            Log.e("zhoud", e.getMessage())
+        }
+    }
 
 
 
