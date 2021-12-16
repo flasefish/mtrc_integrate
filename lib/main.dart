@@ -50,9 +50,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late MethodChannel _channel;
+  late EventChannel _eventChannel;
+  int count = 0;
 
   void onMtrcViewCreated(int id) {
-    _channel = new MethodChannel('com.sensetime.mtrc_integrate/MtrcView_$id');
+    _channel =  MethodChannel('com.sensetime.mtrc_integrate/MtrcView_$id');
+    _eventChannel =   EventChannel('com.sensetime.mtrc_integrate/MtrcEvent_$id');
   }
 
   @override
@@ -95,14 +98,25 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(width: 5),
               RaisedButton(
-                child: Text("call2"),
+                child: Text("addmsg"),
                 onPressed: () async {
-                  //  String result = await androidMethodCallExec();
-                  //   print(result.toString());
+                    String result = await androidMethodSendExec();
+                     print(result.toString());
                 },
               ),
             ],
           ),
+          StreamBuilder(
+              initialData: "暂无消息",
+              stream: _eventChannel.receiveBroadcastStream(),
+              builder: (context, snapshot) {
+                return Center(
+                  child: Text(
+                    "eventChannel:${snapshot.data.toString()}",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                );
+              }),
           Container(
             width: MediaQuery.of(context).size.width,
             height: 600,
@@ -171,5 +185,15 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e.toString());
     }
     return result;
+  }
+
+  Future<String> androidMethodSendExec() async {
+    String result = "";
+    try {
+      result = await _channel.invokeMethod("addMsg", ++count);
+    }on Exception catch(e){
+      print(e.toString());
+    }
+    return  result;
   }
 }

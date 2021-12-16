@@ -16,7 +16,7 @@ class MtrcPlugin : FlutterPlugin{
         binding
                 .platformViewRegistry
                 .registerViewFactory(
-                        "com.sensetime.mtrc_integrate/MtrcView", MtrcViewFactory(messenger))
+                        MtrcView.NATIVE_MRTC_VIEW_TYPE_ID, MtrcViewFactory(messenger))
     }
 
     companion object {
@@ -25,7 +25,7 @@ class MtrcPlugin : FlutterPlugin{
             registrar
                     .platformViewRegistry()
                     .registerViewFactory(
-                            "com.sensetime.mtrc_integrate/MtrcView",
+                            MtrcView.NATIVE_MRTC_VIEW_TYPE_ID,
                             MtrcViewFactory(registrar.messenger()))
         }
     }
