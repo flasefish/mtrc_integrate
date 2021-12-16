@@ -25,12 +25,36 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home:  MyHomePage(),
+      home:  MyHomePage(title: 'Flutter Demo Map Page'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  late MethodChannel _channel;
+
+  void onMtrcViewCreated(int id) {
+    _channel = new MethodChannel('com.sensetime.mtrc_integrate/MtrcView_$id');
+  }
+
   @override
   Widget build(BuildContext context) {
     //第一种修改状态栏字体颜色
@@ -48,8 +72,8 @@ class MyHomePage extends StatelessWidget {
             children: <Widget>[
               RaisedButton(
                 onPressed: () async {
-               //   String result = await androidMethodLoginExec();
-                //  print(result.toString());
+                  String result = await androidMethodLoginExec();
+                  print(result.toString());
                 },
                 child: Text('regedit'),
               ),
@@ -89,7 +113,9 @@ class MyHomePage extends StatelessWidget {
               bottom: 20,
             ),
             child:AndroidView(
-              viewType: "MtrcView",
+              viewType: "com.sensetime.mtrc_integrate/MtrcView",
+              creationParamsCodec: const StandardMessageCodec(),
+              onPlatformViewCreated: onMtrcViewCreated, //初始化
             ),
           ),
         ],
@@ -107,7 +133,7 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<String> androidMethodExec() async {
-    const platform = const MethodChannel('com.test/name');
+    const platform = const MethodChannel("com.sensetime.mtrc_integrate/MtrcView");
     String result = "";
     try {
       result = await platform.invokeMethod('androidMethodExec',{'canshu1':'ssssss1','canshu2':'ssssss2'});
@@ -118,14 +144,22 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<String> androidMethodLoginExec() async {
-    const platform = const MethodChannel('com.test/name');
+   /* const platform = const MethodChannel("com.sensetime.mtrc_integrate/MtrcView");
     String result = "";
     try {
       result = await platform.invokeMethod('androidMethodLoginExec',{'canshu1':'s1','canshu2':'s2'});
     } on Exception catch (e) {
       print(e.toString());
     }
-    return result;
+    return result;*/
+    String result = "";
+    try {
+      result = await _channel.invokeMethod(
+          'androidMethodLoginExec', {'canshu1': 's1', 'canshu2': 's2'});
+    }on Exception catch(e){
+      print(e.toString());
+    }
+    return  result;
   }
 
   Future<String> androidMethodCallExec() async {

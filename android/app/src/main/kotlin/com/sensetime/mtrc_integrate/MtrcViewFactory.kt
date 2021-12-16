@@ -1,3 +1,5 @@
+package com.sensetime.mtrc_integrate
+
 import android.content.Context;
 import android.view.View;
 import androidx.annotation.Nullable;

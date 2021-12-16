@@ -1,3 +1,5 @@
+package com.sensetime.mtrc_integrate
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -14,7 +16,7 @@ class MtrcPlugin : FlutterPlugin{
         binding
                 .platformViewRegistry
                 .registerViewFactory(
-                        "MtrcView", MtrcViewFactory(messenger))
+                        "com.sensetime.mtrc_integrate/MtrcView", MtrcViewFactory(messenger))
     }
 
     companion object {
@@ -23,7 +25,7 @@ class MtrcPlugin : FlutterPlugin{
             registrar
                     .platformViewRegistry()
                     .registerViewFactory(
-                            "MtrcView",
+                            "com.sensetime.mtrc_integrate/MtrcView",
                             MtrcViewFactory(registrar.messenger()))
         }
     }
