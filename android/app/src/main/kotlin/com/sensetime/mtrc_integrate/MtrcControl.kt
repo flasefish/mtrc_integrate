@@ -6,36 +6,38 @@ import android.util.Log
 import org.json.JSONObject
 import thunder.mrtc.MrtcOperator
 import thunder.mrtc.model.MrtcSetupParam
+import thunder.mrtc.MrtcRender
+import thunder.mrtc.callback.CallEventExecutor
+
+import thunder.mrtc.Call
+import thunder.mrtc.model.MediaAttributes
+import thunder.mrtc.common.AttributeValue
 
 class MtrcControl{
-   /* companion object {
-        var impl: MtrcControl = MtrcControl()
-        fun getInstance(): MtrcControl {
-            return impl
-        }
-    }*/
-
-    public lateinit var mrtcOperator: MrtcOperator
+    public  lateinit var call:Call
+    public  lateinit var mrtcOperator: MrtcOperator
     private lateinit var onLineEventExecutor: OnLineEvent
     private lateinit var handler: Handler
+    private lateinit var callEvent: CallEventExecutor
+    private lateinit var callhandler :Handler
 
-    public fun initMrtc(context: Context,mtrcLoginHandle : Handler) {
+
+    public fun initMrtc(context: Context,mtrcLoginHandle : Handler,mtrcCallHandler:Handler) {
         val mrtcSetupParam = MrtcSetupParam("ws://14.215.130.139:18081/ws", "stun:14.215.130.139:3478", true, context)
         mrtcOperator = MrtcOperator.getInstance()
         mrtcOperator.setup(mrtcSetupParam)
 
         handler = mtrcLoginHandle
+        callhandler = mtrcCallHandler
         Log.d("zhoud","initMrtc")
     }
 
     public fun login(loginId:String){
         Log.d("zhoud","MtrcControl login call")
         try {
-            Log.d("zhoud","MtrcControl login call1")
             onLineEventExecutor =  OnLineEvent()
-            Log.d("zhoud","MtrcControl login call2")
             onLineEventExecutor.handler = handler
-            Log.d("zhoud","MtrcControl login call3")
+
 
             var strOnlineExtraData: String? = null
             val extraDataMap: MutableMap<Any?, Any?> = HashMap<Any?, Any?>()
@@ -54,21 +56,36 @@ class MtrcControl{
         }
     }
 
-    class LoginHandler : Handler() {
-        override fun handleMessage(msg: android.os.Message) {
-            super.handleMessage(msg)
-            when (msg.what) {
-                MessageType.LOGIN -> Log.d("zhoud", "MessageType.LOGIN")
-                MessageType.LOGOUT -> Log.d("zhoud", "MessageType.LOGOUT")
-                MessageType.CALL_IN -> {
-                    Log.d("zhoud", "MessageType.CALL_IN")
-                }
-                else -> {
-                    Log.d("zhoud", "MessageType.unknow")
-                }
+    public fun call(remoteId:String,view:MrtcRender){
+        callEvent = CallEvent(callhandler)
+        Log.d("zhoud","start call " +remoteId)
+        try {
+            mrtcOperator = MrtcOperator.getInstance()
+            mrtcOperator.setRemoteRender(view)
+
+            val mediaAttributes = MediaAttributes()
+            mediaAttributes.setVideoAttributeValue(AttributeValue.SENDRECV)
+            mediaAttributes.setAudioAttributeValue(AttributeValue.SENDRECV)
+            var extraData: String? = null
+            val extraDataMap: MutableMap<Any?, Any?> = HashMap<Any?, Any?>()
+            val valueDataMap: MutableMap<Any?, Any?> = HashMap<Any?, Any?>()
+            // val extraDataMap: MutableMap<String?, Any?> = HashMap<Any?, Any?>()
+            // val valueDataMap: MutableMap<String?, Any?> = HashMap<Any, Any?>()
+            valueDataMap.put("location", "SenseThunderE-F00095") //取值{pass, web，mobile}
+            valueDataMap.put("device_name", "SenseThunderE-F00095") //取值{  1：门口机 2：室内机 3：管理机}
+            valueDataMap.put("device_ldi", "SPSPE-40133fb330a749200682322e640f645d")
+            extraDataMap.put("callExtraData", valueDataMap)
+            val jsonObject = JSONObject(extraDataMap)
+            if (jsonObject != null) {
+                extraData = jsonObject.toString()
             }
+            this.call = mrtcOperator.call(remoteId, extraData, mediaAttributes, 10, callEvent)
+        } catch (e: Exception) {
+            Log.e("zhoud", e.message.toString())
         }
     }
+
+
 
 
 

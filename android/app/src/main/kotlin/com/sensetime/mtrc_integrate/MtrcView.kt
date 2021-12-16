@@ -27,6 +27,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
     lateinit var eventChannel  : EventChannel
     var impl: MtrcControl = MtrcControl()
     lateinit var handler: Handler
+    lateinit var callHandler: Handler
 
 
     companion object {
@@ -46,7 +47,8 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         eventChannel.setStreamHandler(this)
 
         handler = LoginHandler()
-        impl.initMrtc(mContext,handler);
+        callHandler = CallHandler()
+        impl.initMrtc(mContext,handler,callHandler);
 
 
     }
@@ -63,12 +65,12 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
     override fun onMethodCall(@NonNull methodCall: MethodCall, @NonNull result: MethodChannel.Result) {
         Log.d("zhoud","onMethodCall = ${methodCall.method}  arg =${methodCall.arguments.toString()} ")
         if(methodCall.method == "MtrcLogin"){
-            result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
-            impl.login(methodCall.arguments.toString())
-
-        }else if(methodCall.method == "MtrcCall"){
             Log.d("zhoud","Login")
-
+            impl.login(methodCall.arguments.toString())
+            result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
+        }else if(methodCall.method == "MtrcCall"){
+            Log.d("zhoud","call")
+            impl.call(methodCall.arguments.toString(),mtrcView)
             result.success("android androidMethodLoginExec run：：" + methodCall.arguments.toString() + methodCall.method)
         }else if(methodCall.method == "MtrcLogout") {
             Log.d("zhoud","MtrcLogout")
@@ -118,6 +120,45 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                 else -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGOUY")
                 }
+            }
+        }
+    }
+
+    class CallHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+           // val intent = Intent()
+            when (msg.what) {
+                MessageType.CALLOUT_ACCEPTED -> {
+                    Log.d("zhoud", "Accept the call")
+                    //mHandler.post(Runnable { videoOutput.setVisibility(View.VISIBLE) })
+                }
+                MessageType.REJECT -> {
+                    Log.d("zhoud", "reject the call")
+                    //把需要返回的数据存放在intent
+                    //      intent.putExtra("type", "reject")
+                    //设置返回数据
+                    //     setResult(RESULT_OK, intent)
+                    //      finish()
+                }
+                MessageType.NETWORK_DISCONNECT -> {
+                    Log.d("zhoud", "NETWORK_DISCONNECT the call")
+                    //把需要返回的数据存放在intent
+                    //     intent.putExtra("type", "disconnect")
+                    //设置返回数据
+                    //     setResult(RESULT_OK, intent)
+                    //     finish()
+                }
+                MessageType.BYE -> {
+                    Log.d("zhoud", "bye the call")
+                    //把需要返回的数据存放在intent
+                    //  intent.putExtra("type", "reject")
+                    //设置返回数据
+                    //  setResult(RESULT_OK, intent)
+                    // mHandler.post(Runnable { videoOutput.setVisibility(View.INVISIBLE) })
+                    //  finish()
+                }
+                else -> {  Log.d("zhoud", "CallHandler unkonw message")}
             }
         }
     }

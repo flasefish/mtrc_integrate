@@ -86,8 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
               RaisedButton(
                 child: Text("call"),
                 onPressed: () async {
-                //  String result = await androidMethodCallExec();
-               //   print(result.toString());
+                  String result = await androidMethodCallExec();
+                  print(result.toString());
                 },
               ),
               SizedBox(width: 5),
@@ -162,14 +162,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> androidMethodLoginExec() async {
-   /* const platform = const MethodChannel("com.sensetime.mtrc_integrate/MtrcView");
-    String result = "";
-    try {
-      result = await platform.invokeMethod('androidMethodLoginExec',{'canshu1':'s1','canshu2':'s2'});
-    } on Exception catch (e) {
-      print(e.toString());
-    }
-    return result;*/
     String result = "";
     try {
       result = await _channel.invokeMethod(
@@ -181,14 +173,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> androidMethodCallExec() async {
-    const platform = const MethodChannel('com.test/name');
     String result = "";
     try {
-      result = await platform.invokeMethod('androidMethodCallExec',{'canshu1':'s1','canshu2':'s2'});
-    } on Exception catch (e) {
+      result = await _channel.invokeMethod(
+          'MtrcCall',  '1081');
+    }on Exception catch(e){
       print(e.toString());
     }
-    return result;
+    return  result;
   }
 
   Future<String> androidMethodSendExec() async {
