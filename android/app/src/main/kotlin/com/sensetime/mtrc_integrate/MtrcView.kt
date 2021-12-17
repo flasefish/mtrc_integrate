@@ -151,6 +151,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
             when (msg.what) {
                 MessageType.CALLOUT_ACCEPTED -> {
                     Log.d("zhoud", "Accept the call")
+                    this@MtrcView.mtrcView.setVisibility(View.VISIBLE)
                     //mHandler.post(Runnable { videoOutput.setVisibility(View.VISIBLE) })
                     this@MtrcView.SendMessageToApp(MessageType.CALLOUT_ACCEPTED)
                 }
@@ -179,10 +180,12 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                     //  setResult(RESULT_OK, intent)
                     // mHandler.post(Runnable { videoOutput.setVisibility(View.INVISIBLE) })
                     //  finish()
+                    this@MtrcView.mtrcView.setVisibility(View.INVISIBLE)
                     this@MtrcView.SendMessageToApp(MessageType.BYE)
                 }
                 MessageType.HANDUP_OK->{
                     Log.d("zhoud", "bye the HANDUP_OK")
+                    this@MtrcView.mtrcView.setVisibility(View.INVISIBLE)
                     this@MtrcView.SendMessageToApp(MessageType.HANDUP_OK)
                 }
                 MessageType.HANDUP_FAIL->{
