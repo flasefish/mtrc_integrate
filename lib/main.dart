@@ -92,10 +92,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(width: 5),
               RaisedButton(
-                child: Text("handup"),
+                child: Text("hangup"),
                 onPressed: () async {
-                  //  String result = await androidMethodCallExec();
-                  //   print(result.toString());
+                    String result = await androidMethodHangupExec();
+                     print(result.toString());
                 },
               ),
               SizedBox(width: 5),
@@ -177,6 +177,17 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       result = await _channel.invokeMethod(
           'MtrcCall',  '1081');
+    }on Exception catch(e){
+      print(e.toString());
+    }
+    return  result;
+  }
+
+  Future<String> androidMethodHangupExec() async {
+    String result = "";
+    try {
+      result = await _channel.invokeMethod(
+          'MtrcHangup',  '');
     }on Exception catch(e){
       print(e.toString());
     }

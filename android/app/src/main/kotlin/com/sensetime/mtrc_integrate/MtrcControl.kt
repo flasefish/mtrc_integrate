@@ -88,22 +88,22 @@ class MtrcControl{
     }
 
     public fun hangup(){
-      /*  try {
-            this.call.hangup(object : HangupEventExecutor() {
-                @Override
-                fun onSuccess() {
+        try {
+            this.call.hangup(object : HangupEventExecutor {
+                override fun onSuccess() {
                     Log.i("zhoud", "hang up success")
+                    callhandler.sendEmptyMessage(MessageType.HANDUP_OK)
                 }
 
-                @Override
-                fun onFail(code: Int, message: String?) {
-                    Log.i("zhoud", "hang up success")
+                override fun onFail(code: Int, message: String?) {
+                    Log.i("zhoud", "hang up onFail")
+                    callhandler.sendEmptyMessage(MessageType.HANDUP_FAIL)
                 }
             }, ByeReason.INITIATIVE)
 
         } catch (e: Exception) {
             Log.e("zhoud", e.toString())
-        }*/
+        }
     }
 
 

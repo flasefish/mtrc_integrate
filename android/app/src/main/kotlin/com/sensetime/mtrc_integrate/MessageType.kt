@@ -14,6 +14,8 @@ object MessageType {
     const val NETWORK_DISCONNECT = 1009
     const val EXCEPTION = 1010
     const val CHANNELMESSAGE = 1011
+    const val HANDUP_OK = 1012
+    const val HANDUP_FAIL = 1013
     const val ACTIVE_CALL = "active_call"
     const val PASSIVE_CALL = "passive_call"
     const val LOCAL_ID = "local_id"

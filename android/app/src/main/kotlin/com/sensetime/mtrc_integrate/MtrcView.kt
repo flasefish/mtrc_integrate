@@ -68,14 +68,13 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
             Log.d("zhoud","Login")
             impl.login(methodCall.arguments.toString())
             result.success("android原生执行：："+methodCall.arguments.toString()+methodCall.method)
-        }else if(methodCall.method == "MtrcCall"){
-            Log.d("zhoud","call")
-            impl.call(methodCall.arguments.toString(),mtrcView)
+        }else if(methodCall.method == "MtrcCall") {
+            Log.d("zhoud", "call")
+            impl.call(methodCall.arguments.toString(), mtrcView)
             result.success("android androidMethodLoginExec run：：" + methodCall.arguments.toString() + methodCall.method)
-        }else if(methodCall.method == "MtrcLogout") {
-            Log.d("zhoud","MtrcLogout")
         }else if(methodCall.method == "MtrcHangup") {
             Log.d("zhoud","MtrcHangup")
+            impl.hangup()
         }else if (methodCall.method.equals("addMsg")) {
             Log.d("zhoud","MtrcaddMsg call ${methodCall.method},arg = ${methodCall.arguments} " )
             if (methodCall.arguments != null) {
@@ -130,6 +129,14 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                     Log.d("zhoud","LoginHandler MessageType.CHANNELMESSAGE")
                     this@MtrcView.SendMessageToApp(MessageType.CHANNELMESSAGE) //onCloseWebsocket()
                 }
+                MessageType.HANDUP_OK->{
+                    Log.d("zhoud","LoginHandler MessageType.CHANNELMESSAGE")
+                    this@MtrcView.SendMessageToApp(MessageType.HANDUP_OK) //onCloseWebsocket()
+                }
+                MessageType.HANDUP_FAIL->{
+                    Log.d("zhoud","LoginHandler MessageType.CHANNELMESSAGE")
+                    this@MtrcView.SendMessageToApp(MessageType.HANDUP_FAIL) //onCloseWebsocket()
+                }
                 else -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGOUY")
                 }
@@ -174,7 +181,15 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                     //  finish()
                     this@MtrcView.SendMessageToApp(MessageType.BYE)
                 }
-                else -> {  Log.d("zhoud", "CallHandler unkonw message")}
+                MessageType.HANDUP_OK->{
+                    Log.d("zhoud", "bye the HANDUP_OK")
+                    this@MtrcView.SendMessageToApp(MessageType.HANDUP_OK)
+                }
+                MessageType.HANDUP_FAIL->{
+                    Log.d("zhoud", "bye the HANDUP_FAIL")
+                    this@MtrcView.SendMessageToApp(MessageType.HANDUP_FAIL)
+                }
+                else -> {  Log.d("zhoud", "CallHandler unkonw message  ${msg.what}")}
             }
         }
     }
