@@ -41,15 +41,22 @@ public class OnLineEvent : OnLineEventExecutor {
         handler.sendMessage(msg)
     }
 
-    override fun onCancelCall(mrtcCall: Call?) {}
+    override fun onCancelCall(mrtcCall: Call?) {
+        Log.i(TAG, "CanceCall")
+        handler.sendEmptyMessage(MessageType.CANCEL_CALL)
+    }
 
     override fun onRemoteBye(mrtcCall: Call?, byeReason: ByeReason?) {
         Log.i(TAG, "on Remote Bye")
+        handler.sendEmptyMessage(MessageType.REVOTE_BYE)
     }
 
     override fun onReconnect() {}
 
-    override fun onException(code: Int, message: String?) {}
+    override fun onException(code: Int, message: String?) {
+        Log.i(TAG, "on Remote Bye")
+        handler.sendEmptyMessage(MessageType.EXCEPTION)
+    }
 
     /**
      * datachannel 打开事件
@@ -73,6 +80,7 @@ public class OnLineEvent : OnLineEventExecutor {
         msg.get(bytes)
         val strData = String(bytes, Charset.forName("UTF-8"))
         Log.i(TAG, "Got msg: $strData")
+        handler.sendEmptyMessage(MessageType.CHANNELMESSAGE)
     }
 
 

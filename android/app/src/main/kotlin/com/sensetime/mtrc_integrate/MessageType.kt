@@ -9,7 +9,11 @@ object MessageType {
     const val REJECT = 1004
     const val BYE = 1005
     const val CALLOUT_ACCEPTED = 1006
+    const val CANCEL_CALL = 1007
+    const val REVOTE_BYE = 1008
     const val NETWORK_DISCONNECT = 1009
+    const val EXCEPTION = 1010
+    const val CHANNELMESSAGE = 1011
     const val ACTIVE_CALL = "active_call"
     const val PASSIVE_CALL = "passive_call"
     const val LOCAL_ID = "local_id"

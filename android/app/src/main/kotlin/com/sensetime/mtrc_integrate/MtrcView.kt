@@ -99,7 +99,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         eventSink = null
     }
 
-    open fun switchToLoginState(type:Int){
+    open fun SendMessageToApp(type:Int){
         eventSink?.success(type)
     }
 
@@ -109,13 +109,26 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
             when (msg.what) {
                 MessageType.LOGIN -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGIN")
-                    this@MtrcView.switchToLoginState(MessageType.LOGIN) //获取外部类的成员变量
+                    this@MtrcView.SendMessageToApp(MessageType.LOGIN) //onRegSuccess()
                 }
                 MessageType.LOGOUT -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGOUT")
+                    this@MtrcView.SendMessageToApp(MessageType.LOGOUT) //onCloseWebsocket()
                 }
                 MessageType.CALL_IN -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGOUY")
+                }
+                MessageType.CANCEL_CALL->{
+                    Log.d("zhoud","LoginHandler MessageType.CANCEL_CALL")
+                    this@MtrcView.SendMessageToApp(MessageType.CANCEL_CALL) //onCloseWebsocket()
+                }
+                MessageType.EXCEPTION->{
+                    Log.d("zhoud","LoginHandler MessageType.EXCEPTION")
+                    this@MtrcView.SendMessageToApp(MessageType.EXCEPTION) //onCloseWebsocket()
+                }
+                MessageType.CHANNELMESSAGE->{
+                    Log.d("zhoud","LoginHandler MessageType.CHANNELMESSAGE")
+                    this@MtrcView.SendMessageToApp(MessageType.CHANNELMESSAGE) //onCloseWebsocket()
                 }
                 else -> {
                     Log.d("zhoud","LoginHandler MessageType.LOGOUY")
@@ -124,7 +137,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
         }
     }
 
-    class CallHandler : Handler() {
+    inner class CallHandler : Handler() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
            // val intent = Intent()
@@ -132,9 +145,11 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                 MessageType.CALLOUT_ACCEPTED -> {
                     Log.d("zhoud", "Accept the call")
                     //mHandler.post(Runnable { videoOutput.setVisibility(View.VISIBLE) })
+                    this@MtrcView.SendMessageToApp(MessageType.CALLOUT_ACCEPTED)
                 }
                 MessageType.REJECT -> {
                     Log.d("zhoud", "reject the call")
+                    this@MtrcView.SendMessageToApp(MessageType.REJECT)
                     //把需要返回的数据存放在intent
                     //      intent.putExtra("type", "reject")
                     //设置返回数据
@@ -157,6 +172,7 @@ class  MtrcView(context: Context, messenger: BinaryMessenger, viewId: Int, args:
                     //  setResult(RESULT_OK, intent)
                     // mHandler.post(Runnable { videoOutput.setVisibility(View.INVISIBLE) })
                     //  finish()
+                    this@MtrcView.SendMessageToApp(MessageType.BYE)
                 }
                 else -> {  Log.d("zhoud", "CallHandler unkonw message")}
             }

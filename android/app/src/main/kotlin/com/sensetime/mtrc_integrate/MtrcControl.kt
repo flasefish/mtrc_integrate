@@ -10,8 +10,10 @@ import thunder.mrtc.MrtcRender
 import thunder.mrtc.callback.CallEventExecutor
 
 import thunder.mrtc.Call
+import thunder.mrtc.callback.HangupEventExecutor
 import thunder.mrtc.model.MediaAttributes
 import thunder.mrtc.common.AttributeValue
+import thunder.mrtc.common.ByeReason
 
 class MtrcControl{
     public  lateinit var call:Call
@@ -86,7 +88,7 @@ class MtrcControl{
     }
 
     public fun hangup(){
-        try {
+      /*  try {
             this.call.hangup(object : HangupEventExecutor() {
                 @Override
                 fun onSuccess() {
@@ -98,10 +100,10 @@ class MtrcControl{
                     Log.i("zhoud", "hang up success")
                 }
             }, ByeReason.INITIATIVE)
-            finish()
+
         } catch (e: Exception) {
-            Log.e("zhoud", e.getMessage())
-        }
+            Log.e("zhoud", e.toString())
+        }*/
     }
 
 
